@@ -1,13 +1,14 @@
 FROM ubuntu:trusty
 
-RUN apt-get install update &&
-    apt-get install -y curl &&
+RUN apt-get update 
+
+RUN apt-get install -y curl &&\
     apt-get install -y realpath
 
-COPY wait-for-it.sh .
+ADD ./wait-for-it.sh /ws/
+WORKDIR /ws
+RUN chmod +x /ws/wait-for-it.sh
 
-ENV TEST_HOST
-ENV CURL_HOST
-ENV HTTP_VERB
-
-ENTRYPOINT "./wait-for-it.sh $TEST_HOST -- curl -X $HTTP_VERB $CURL_HOST"
+ENV TEST_HOST http://www.google.com 
+ENV HTTP_VERB GET
+ENV CURL_HOST http://www.google.com
